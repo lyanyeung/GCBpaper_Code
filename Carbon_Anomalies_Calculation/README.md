@@ -48,6 +48,7 @@ The scripts require the following R packages:
 ```r
 install.packages(c("tidyverse", "lubridate", "ggplot2", "mgcv", "rlang", "qpdf"))
 
+```markdown
 ## How to run
 update the input and output paths in the R scripts, then run:
 ```r
