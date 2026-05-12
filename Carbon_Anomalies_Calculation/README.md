@@ -25,6 +25,7 @@ data/
 ├── AU_How_2002_2024/
 │   └── AU_How.csv
 └── ...
+```
 
 ## Required input columns
 
@@ -47,6 +48,7 @@ The scripts require the following R packages:
 
 ```r
 install.packages(c("tidyverse", "lubridate", "ggplot2", "mgcv", "rlang", "qpdf"))
+```
 
 ## How to run
 update the input and output paths in the R scripts, then run:
