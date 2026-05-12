@@ -25,3 +25,25 @@ data/
 ├── AU_How_2002_2024/
 │   └── AU_How.csv
 └── ...
+
+## Required input columns
+
+Each site CSV file should include:
+
+- `TIMESTAMP`
+- `NEE_VUT_REF`
+- `GPP_NT_VUT_REF`
+- `RECO_NT_VUT_REF`
+
+For carbon anomaly calculation, the following quality-control column is also required:
+
+- `NEE_VUT_REF_QC`
+
+Missing values coded as `-9999` are treated as `NA`.
+
+## Required R packages
+
+The scripts require the following R packages:
+
+```r
+install.packages(c("tidyverse", "lubridate", "ggplot2", "mgcv", "rlang", "qpdf"))
