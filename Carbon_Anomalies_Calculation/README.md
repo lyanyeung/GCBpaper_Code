@@ -47,3 +47,9 @@ The scripts require the following R packages:
 
 ```r
 install.packages(c("tidyverse", "lubridate", "ggplot2", "mgcv", "rlang", "qpdf"))
+
+## How to run
+update the input and output paths in the R scripts, then run:
+```r
+source("CarbonAnomaly_Batch.R")
+source("Carbonuptakeinterval_Batch.R")
