@@ -165,12 +165,12 @@ cat("--- 1. Data Loading and Preparation ---\n")
 all_stats <- read_csv(CONFIG$stats_file, show_col_types = FALSE)
 folder_list <- read_csv(CONFIG$folder_list_file, show_col_types = FALSE)
 
-# 检查所有需要的列是否存在 (注意：这里加入了 LATITUDE)
+# Check that all required columns exist (including LATITUDE).
 required_cols <- c("canopy_height", "Mean_Annual_Precip", "Growing_LAI", "Fpar", "MAT", "Weighted_AWC", "LATITUDE")
 missing_cols <- required_cols[!required_cols %in% names(folder_list)]
 if(length(missing_cols) > 0) stop(paste("Error: Columns missing in folder_list:", paste(missing_cols, collapse=", ")))
 
-# 整理站点元数据
+# Prepare site metadata.
 site_info <- folder_list %>%
   mutate(
     clean_name = sub("_\\d{4}_\\d{4}$", "", folder),
@@ -185,7 +185,7 @@ site_info <- folder_list %>%
          Fpar = Fpar,
          MAT = MAT,
          AWC = Weighted_AWC,
-         LAT = LATITUDE) # <--- 读取 LATITUDE 并重命名为 LAT
+         LAT = LATITUDE) # Read LATITUDE and rename it to LAT.
 
 cat("✓ Site metadata loaded successfully (Included LATITUDE).\n\n")
 
@@ -215,7 +215,7 @@ for (i in seq_along(CONFIG$scenarios)) {
     )
   
   if (nrow(meta_data) > 10) {
-    # 标准化所有预测变量
+    # Standardise all predictor variables.
     meta_data <- meta_data %>%
       mutate(
         CH_std   = as.numeric(scale(CH)),
@@ -248,7 +248,7 @@ predictors_pool <- c("CH_std", "MAP_std", "LAI_std", "Fpar_std", "MAT_std", "AWC
 model_configs <- list()
 model_counter <- 1
 
-# 生成 1 到 4 个变量的所有组合
+# Generate all combinations of one to four variables.
 for (k in 1:CONFIG$max_vars_per_model) {
   combos <- combn(predictors_pool, k, simplify = FALSE)
   
@@ -297,9 +297,9 @@ for (scenario_name in names(all_scenario_data)) {
   
   scenario_models <- list()
   
-  # 遍历所有模型组合
+  # Iterate over all model combinations.
   for (cfg in model_configs) {
-    # 简单的进度显示 (每10个模型打一个点)
+    # Simple progress indicator (print one dot for every 10 models).
     if(as.numeric(sub("M","",cfg$id)) %% 10 == 0) cat(".")
     
     f <- as.formula(paste("beta_hw | se(se_beta, sigma = TRUE) ~", cfg$formula))
@@ -314,7 +314,7 @@ for (scenario_name in names(all_scenario_data)) {
       silent = 2, refresh = 0
     )
     
-    # 【保存模型对象】
+    # Save the model object.
     scenario_models[[cfg$id]] <- fit 
     
     post <- as_draws_df(fit)
@@ -351,7 +351,7 @@ for (scenario_name in names(all_scenario_data)) {
   }
   cat(" Done.\n")
   
-  # 【保存该情景下的所有模型列表】
+  # Save the list of all models for this scenario.
   all_models_objects[[scenario_name]] <- scenario_models 
   cat("\n")
 }
